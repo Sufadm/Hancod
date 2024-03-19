@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hancode_test/model/res/style/colors.dart';
-import 'package:hancode_test/view/components/add_cart_button.dart';
+import 'package:hancode_test/model/res/style/textstyles.dart';
+import 'package:hancode_test/view/components/products_count_widget.dart';
+import 'package:hancode_test/viewmodel/counter_provider.dart';
+import 'package:hancode_test/viewmodel/total_price.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
   final List<Map<String, dynamic>> selectedItems;
@@ -20,23 +24,30 @@ class CartPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: selectedItems.length,
-                  itemBuilder: (context, index) {
-                    final item = selectedItems[index];
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("${index + 1}."),
-                        Text(item['name']),
-                        ProductAdd(
-                          quantity: item["quantity"],
-                        ),
-                        Text(item['price']),
-                      ],
-                    );
-                  },
+                Consumer<CounterProvider>(
+                  builder: (context, counterProvider, _) => ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: selectedItems.length,
+                    itemBuilder: (context, index) {
+                      final item = selectedItems[index];
+                      final price = double.parse(
+                          item['price'].replaceAll('₹', '').trim());
+                      final quantity = counterProvider.getCounter(index);
+                      final totalPrice = price * quantity;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("${index + 1}."),
+                          Text(item['name']),
+                          ProductsCount(
+                            index: index,
+                            quantity: quantity,
+                          ),
+                          Text(totalPrice.toString()),
+                        ],
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 25),
                 const Text(
@@ -113,13 +124,20 @@ class CartPage extends StatelessWidget {
                             children: [
                               const Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text("sdsd"),
+                                child: Text(
+                                  "Enter Coupon Code",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
                               Container(
                                 width: 100,
                                 height: 50,
-                                color: Colors.greenAccent,
-                                child: const Center(child: Text("Apply")),
+                                color: const Color.fromARGB(255, 2, 74, 39),
+                                child: Center(
+                                    child: Text(
+                                  "Apply",
+                                  style: latoW,
+                                )),
                               )
                             ],
                           ),
@@ -164,29 +182,54 @@ class CartPage extends StatelessWidget {
                           style: TextStyle(fontSize: 12),
                         )),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+                      Consumer<CounterProvider>(
+                        builder: (context, counterProvider, _) =>
+                            ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: selectedItems.length,
+                          itemBuilder: (context, index) {
+                            final item = selectedItems[index];
+                            final price = double.parse(
+                                item['price'].replaceAll('₹', '').trim());
+                            final quantity = counterProvider.getCounter(index);
+                            final totalPrice = price * quantity;
+
+                            return Column(
                               children: [
-                                Text("Kitchen cleaning"),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(item['name']),
+                                      Text(totalPrice.toString()),
+                                    ],
+                                  ),
+                                ),
                               ],
-                            ),
-                            Text("Kitchen cleaning"),
-                            Text("Kitchen cleaning"),
-                            Text("Kitchen cleaning"),
-                            Divider(
-                              color: Colors.black,
+                            );
+                          },
+                        ),
+                      ),
+                      const Divider(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total price : ",
+                              style: latoBold,
                             ),
                             Text(
-                              "Total:",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              calculateTotalPrice(selectedItems,
+                                      Provider.of<CounterProvider>(context))
+                                  .toString(),
                             )
                           ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
