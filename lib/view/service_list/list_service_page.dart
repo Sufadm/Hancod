@@ -130,7 +130,7 @@ class ServiceAllScreen extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       List<Map<String, dynamic>> selectedItems = [];
-                      for (int i = 0; i < services.length; i++) {
+                      for (int i = 1; i < services.length; i++) {
                         int quantity =
                             Provider.of<CounterProvider>(context, listen: false)
                                 .getCounter(i);

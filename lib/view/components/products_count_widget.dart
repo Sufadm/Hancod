@@ -19,7 +19,9 @@ class ProductsCount extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.remove),
             onPressed: () {
-              value.getCounter(index) > 1 ? value.decrement(index) : "1";
+              if (value.getCounter(index) > 1) {
+                value.decrement(index);
+              }
             },
           ),
           Container(
@@ -34,7 +36,7 @@ class ProductsCount extends StatelessWidget {
             height: 25,
             child: Center(
               child: Text(
-                quantity.toString(),
+                value.getCounter(index).toString(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

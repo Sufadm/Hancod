@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hancode_test/model/data/google_signin.dart';
 import 'package:hancode_test/model/data/phone_otp.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/view/auth/verification_page.dart';
+import 'package:hancode_test/view/bottomnav/bottom_nav_screen.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginPage extends StatelessWidget {
@@ -31,11 +33,22 @@ class LoginPage extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 style: const TextStyle(color: Colors.white),
                 controller: phoneController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter phone number';
+                  } else if (value.length != 10) {
+                    return 'Please enter a valid 10-digit phone number';
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
-                    hintText: "Enter Phone Number",
-                    hintStyle: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w100),
-                    border: OutlineInputBorder()),
+                  hintText: "Enter Phone Number",
+                  hintStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w100,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
               ),
               kHeight10,
               Padding(
@@ -49,7 +62,32 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(0),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        AuthenticationService.sendPhoneNumber(
+                          phoneController.text,
+                          onVerificationCompleted: (credential) {
+                            // Handle verification completed
+                          },
+                          onVerificationFailed: (exception) {
+                            // Handle verification failed
+                          },
+                          onCodeSent: (verificationId, _) {
+                            // Navigate to verification page
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return VerificationPage(
+                                phoneNumber: phoneController.text,
+                                verificationId: verificationId,
+                              );
+                            }));
+                          },
+                          onCodeAutoRetrievalTimeout: (verificationId) {
+                            // Handle auto retrieval timeout
+                          },
+                        );
+                      }
+                    },
                     child: const Text(
                       "Send OTP",
                       style: TextStyle(color: Colors.black),
@@ -58,7 +96,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -68,7 +106,15 @@ class LoginPage extends StatelessWidget {
                   child: SignInButton(
                     Buttons.google,
                     text: "Sign up with Google",
-                    onPressed: () {},
+                    onPressed: () async {
+                      final userCredential = await signInWithGoogle();
+                      if (userCredential != null) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const BottomNav();
+                        }));
+                      }
+                    },
                   ),
                 ),
               )
