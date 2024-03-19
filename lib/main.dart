@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hancode_test/firebase_options.dart';
 import 'package:hancode_test/view/auth/login_page.dart';
 import 'package:hancode_test/viewmodel/counter_provider.dart';
+import 'package:hancode_test/viewmodel/loading.dart';
 import 'package:hancode_test/viewmodel/servide_selection_model.dart';
+import 'package:hancode_test/viewmodel/timer.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -26,7 +28,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CounterProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TimerProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Loading(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

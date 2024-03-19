@@ -11,7 +11,7 @@ class AuthenticationService {
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
       await auth.verifyPhoneNumber(
-        phoneNumber: '+91 $phoneNumber',
+        phoneNumber: '+91$phoneNumber',
         verificationCompleted: onVerificationCompleted,
         verificationFailed: onVerificationFailed,
         codeSent: onCodeSent,

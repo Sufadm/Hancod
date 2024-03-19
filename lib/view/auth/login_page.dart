@@ -4,6 +4,8 @@ import 'package:hancode_test/model/data/phone_otp.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/view/auth/verification_page.dart';
 import 'package:hancode_test/view/bottomnav/bottom_nav_screen.dart';
+import 'package:hancode_test/viewmodel/loading.dart';
+import 'package:provider/provider.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginPage extends StatelessWidget {
@@ -42,6 +44,8 @@ class LoginPage extends StatelessWidget {
                   return null;
                 },
                 decoration: const InputDecoration(
+                  prefixText: ' +91 ',
+                  prefixStyle: TextStyle(color: Colors.white, fontSize: 16),
                   hintText: "Enter Phone Number",
                   hintStyle: TextStyle(
                     color: Colors.white,
@@ -51,49 +55,50 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               kHeight10,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+              Consumer<Loading>(
+                builder: (context, value, child) => value.loading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 255, 255, 255),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                AuthenticationService.sendPhoneNumber(
+                                  phoneController.text,
+                                  onVerificationCompleted: (credential) {},
+                                  onVerificationFailed: (exception) {},
+                                  onCodeSent: (verificationId, _) {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return VerificationPage(
+                                        phoneNumber: phoneController.text,
+                                        verificationId: verificationId,
+                                      );
+                                    }));
+                                  },
+                                  onCodeAutoRetrievalTimeout:
+                                      (verificationId) {},
+                                );
+                              }
+                            },
+                            child: const Text(
+                              "Send OTP",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        AuthenticationService.sendPhoneNumber(
-                          phoneController.text,
-                          onVerificationCompleted: (credential) {
-                            // Handle verification completed
-                          },
-                          onVerificationFailed: (exception) {
-                            // Handle verification failed
-                          },
-                          onCodeSent: (verificationId, _) {
-                            // Navigate to verification page
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return VerificationPage(
-                                phoneNumber: phoneController.text,
-                                verificationId: verificationId,
-                              );
-                            }));
-                          },
-                          onCodeAutoRetrievalTimeout: (verificationId) {
-                            // Handle auto retrieval timeout
-                          },
-                        );
-                      }
-                    },
-                    child: const Text(
-                      "Send OTP",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),
               ),
               const SizedBox(
                 height: 20,
@@ -109,6 +114,7 @@ class LoginPage extends StatelessWidget {
                     onPressed: () async {
                       final userCredential = await signInWithGoogle();
                       if (userCredential != null) {
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
                           return const BottomNav();
