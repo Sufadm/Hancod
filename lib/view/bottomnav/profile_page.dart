@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hancode_test/model/res/constant/profile_listtile.dart';
-import 'package:hancode_test/model/res/constant/service_imag.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
 import 'package:hancode_test/view/components/list_tile.dart';

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hancode_test/model/res/style/colors.dart';
+import 'package:hancode_test/view/components/add_cart_button.dart';
 
 class CartPage extends StatelessWidget {
-  const CartPage({Key? key}) : super(key: key);
+  final List<Map<String, dynamic>> selectedItems;
+
+  const CartPage({Key? key, required this.selectedItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,27 +20,23 @@ class CartPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Text("1."),
-                          const Text("Kitchen cleaning"),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            height: 40,
-                            child: const ProductAdd(),
-                          ),
-                          const Text("₹ 499.00"),
-                        ],
-                      ),
-                    ],
-                  ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: selectedItems.length,
+                  itemBuilder: (context, index) {
+                    final item = selectedItems[index];
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text("${index + 1}."),
+                        Text(item['name']),
+                        ProductAdd(
+                          quantity: item["quantity"],
+                        ),
+                        Text(item['price']),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 25),
                 const Text(
@@ -209,47 +208,6 @@ class CartPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class ProductAdd extends StatelessWidget {
-  const ProductAdd({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-          icon: const Icon(Icons.remove),
-          onPressed: () {},
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7),
-            border: Border.all(
-              color: Colors.black,
-              width: 1.0,
-            ),
-          ),
-          width: 20,
-          height: 25,
-          child: const Center(
-            child: Text(
-              "0",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }
