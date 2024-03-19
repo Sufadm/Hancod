@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
+import 'package:hancode_test/view/cart/cart_page.dart';
 import 'package:hancode_test/view/components/add_cart_button.dart';
 import 'package:hancode_test/view/components/select_buttons.dart';
 import 'package:hancode_test/viewmodel/servide_selection_model.dart';
@@ -123,7 +124,12 @@ class ServiceAllScreen extends StatelessWidget {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           const Color.fromARGB(255, 229, 138, 1))),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const CartPage();
+                    }));
+                  },
                   child: Text(
                     "View Cart",
                     style: latoW,
