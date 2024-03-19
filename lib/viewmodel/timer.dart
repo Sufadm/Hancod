@@ -24,12 +24,6 @@ class TimerProvider extends ChangeNotifier {
     });
   }
 
-  void resetTimer() {
-    _secondsRemaining = 60; // Reset timer to initial value
-    notifyListeners();
-    _startTimer();
-  }
-
   @override
   void dispose() {
     _timer.cancel();

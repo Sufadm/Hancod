@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:hancode_test/view/auth/login_page.dart';
 
 class AuthenticationService {
   static void sendPhoneNumber(
@@ -22,4 +24,10 @@ class AuthenticationService {
       onVerificationFailed(e);
     }
   }
+}
+
+void logout(BuildContext context) {
+  FirebaseAuth.instance.signOut();
+  Navigator.pushAndRemoveUntil(context,
+      MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
 }

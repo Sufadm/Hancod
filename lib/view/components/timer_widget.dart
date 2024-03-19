@@ -11,8 +11,6 @@ class TimerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timerProvider = Provider.of<TimerProvider>(context);
-
     return Consumer<TimerProvider>(
       builder: (context, timer, _) {
         return timer.secondsRemaining == 0

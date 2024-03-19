@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
-import 'package:hancode_test/view/cart/cart_page.dart';
+import 'package:hancode_test/view/components/cart_page.dart';
 import 'package:hancode_test/view/components/add_cart_button.dart';
 import 'package:hancode_test/view/components/select_buttons.dart';
 import 'package:hancode_test/viewmodel/counter_provider.dart';

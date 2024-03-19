@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:hancode_test/model/data/phone_otp.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
 import 'package:hancode_test/view/components/timer_widget.dart';
@@ -74,6 +72,7 @@ class VerificationPage extends StatelessWidget {
                                     const BeveledRectangleBorder())),
                             onPressed: () {
                               if (isVerified == true) {
+                                value.loading = true;
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

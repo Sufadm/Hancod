@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hancode_test/model/data/google_signin.dart';
 import 'package:hancode_test/model/data/phone_otp.dart';
@@ -44,7 +45,7 @@ class LoginPage extends StatelessWidget {
                   return null;
                 },
                 decoration: const InputDecoration(
-                  prefixText: ' +91 ',
+                  prefixText: '+91 ',
                   prefixStyle: TextStyle(color: Colors.white, fontSize: 16),
                   hintText: "Enter Phone Number",
                   hintStyle: TextStyle(
@@ -74,18 +75,23 @@ class LoginPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
+                                value.loading == true;
                                 AuthenticationService.sendPhoneNumber(
                                   phoneController.text,
                                   onVerificationCompleted: (credential) {},
-                                  onVerificationFailed: (exception) {},
+                                  onVerificationFailed: (exception) {
+                                    value.loading;
+                                  },
                                   onCodeSent: (verificationId, _) {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return VerificationPage(
-                                        phoneNumber: phoneController.text,
-                                        verificationId: verificationId,
-                                      );
-                                    }));
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => VerificationPage(
+                                          phoneNumber: phoneController.text,
+                                          verificationId: verificationId,
+                                        ),
+                                      ),
+                                    );
                                   },
                                   onCodeAutoRetrievalTimeout:
                                       (verificationId) {},

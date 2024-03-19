@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hancode_test/firebase_options.dart';
-import 'package:hancode_test/view/auth/login_page.dart';
+import 'package:hancode_test/view/splash/splash_screen.dart';
 import 'package:hancode_test/viewmodel/counter_provider.dart';
 import 'package:hancode_test/viewmodel/loading.dart';
 import 'package:hancode_test/viewmodel/servide_selection_model.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: LoginPage(),
+        home: const Splash(),
       ),
     );
   }
