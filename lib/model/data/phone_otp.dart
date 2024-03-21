@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/view/auth/login_page.dart';
 
 class AuthenticationService {
@@ -28,6 +29,9 @@ class AuthenticationService {
 
 void logout(BuildContext context) {
   FirebaseAuth.instance.signOut();
-  Navigator.pushAndRemoveUntil(context,
-      MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+  Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ProviderScope(child: LoginPage())),
+      (route) => false);
 }

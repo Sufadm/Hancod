@@ -23,9 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => ServiceSelectionModel(),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (context) => ServiceSelectionModel(),
+        // ),
         ChangeNotifierProvider(
           create: (context) => CounterProvider(),
         ),
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           create: (context) => TimerProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => Loading(),
+          create: (context) => LoadingProvider(),
         ),
       ],
       child: MaterialApp(

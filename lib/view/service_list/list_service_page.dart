@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
-import 'package:hancode_test/view/components/cart_page.dart';
+import 'package:hancode_test/view/cart/cart_page.dart';
 import 'package:hancode_test/view/components/add_cart_button.dart';
 import 'package:hancode_test/view/components/select_buttons.dart';
-import 'package:hancode_test/viewmodel/counter_provider.dart';
 import 'package:hancode_test/viewmodel/servide_selection_model.dart';
-import 'package:provider/provider.dart';
 
 class ServiceAllScreen extends StatelessWidget {
   ServiceAllScreen({Key? key}) : super(key: key);
@@ -30,34 +29,7 @@ class ServiceAllScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Consumer<ServiceSelectionModel>(
-              builder: (context, model, _) => Container(
-                height: 60,
-                color: const Color.fromARGB(255, 207, 244, 208),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SelectButtons(
-                        context: context,
-                        title: 'Deep Cleaning',
-                        index: 0,
-                        selectedIndex: model.selectedIndex),
-                    const SizedBox(width: 10),
-                    SelectButtons(
-                        context: context,
-                        title: 'Maid Services',
-                        index: 1,
-                        selectedIndex: model.selectedIndex),
-                    const SizedBox(width: 10),
-                    SelectButtons(
-                        context: context,
-                        title: 'Car Cleaning',
-                        index: 2,
-                        selectedIndex: model.selectedIndex),
-                  ],
-                ),
-              ),
-            ),
+            const SelectionService(),
             kHeight15,
             Expanded(
               child: ListView.builder(
@@ -130,18 +102,18 @@ class ServiceAllScreen extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       List<Map<String, dynamic>> selectedItems = [];
-                      for (int i = 1; i < services.length; i++) {
-                        int quantity =
-                            Provider.of<CounterProvider>(context, listen: false)
-                                .getCounter(i);
-                        if (quantity > 0) {
-                          selectedItems.add({
-                            'name': services[i]['name'],
-                            'quantity': quantity,
-                            'price': services[i]['price'],
-                          });
-                        }
-                      }
+                      // for (int i = 0; i < services.length; i++) {
+                      //   int quantity =
+                      //       Provider.of<CounterProvider>(context, listen: false)
+                      //           .getCounter(i);
+                      //   if (quantity > 0) {
+                      //     selectedItems.add({
+                      //       'name': services[i]['name'],
+                      //       'quantity': quantity,
+                      //       'price': services[i]['price'],
+                      //     });
+                      //   }
+                      // }
                       return CartPage(
                         selectedItems: selectedItems,
                       );
@@ -154,6 +126,39 @@ class ServiceAllScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SelectionService extends ConsumerWidget {
+  const SelectionService({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      height: 60,
+      color: const Color.fromARGB(255, 207, 244, 208),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SelectButtons(
+            title: 'Deep Cleaning',
+            index: 0,
+          ),
+          SizedBox(width: 10),
+          SelectButtons(
+            title: 'Maid Services',
+            index: 1,
+          ),
+          SizedBox(width: 10),
+          SelectButtons(
+            title: 'Car Cleaning',
+            index: 2,
+          ),
+        ],
       ),
     );
   }

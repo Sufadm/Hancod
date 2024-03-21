@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/view/bottomnav/bookings.dart';
 import 'package:hancode_test/view/profile/profile_page.dart';
 import 'package:hancode_test/view/home/home_page.dart';
@@ -19,3 +20,7 @@ class BottomNavState extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+final bottomNavProvider = ChangeNotifierProvider<BottomNavState>((ref) {
+  return BottomNavState();
+});

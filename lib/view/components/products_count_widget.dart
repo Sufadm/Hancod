@@ -16,39 +16,27 @@ class ProductsCount extends StatelessWidget {
     return Consumer<CounterProvider>(
       builder: (context, value, _) => Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.remove),
-            onPressed: () {
-              if (value.getCounter(index) > 1) {
-                value.decrement(index);
-              }
-            },
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(7),
-              border: Border.all(
-                color: Colors.black,
-                width: 1.0,
-              ),
-            ),
-            width: 20,
-            height: 25,
-            child: Center(
-              child: Text(
-                value.getCounter(index).toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+          // IconButton(
+          //   icon: const Icon(Icons.remove),
+          //   onPressed: () {
+          //     value.decrement(index);
+          //   },
+          // ),
+          Center(
+            child: Text(
+              quantity.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              value.increment(index);
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.add),
+          //   onPressed: () {
+          //     value.increment(index);
+          //   },
+          // ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/view/auth/login_page.dart';
 import 'package:hancode_test/view/bottomnav/bottom_nav_screen.dart';
 
@@ -22,11 +23,11 @@ class _SplashState extends State<Splash> {
     FirebaseAuth auth = FirebaseAuth.instance;
     if (auth.currentUser != null) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const BottomNav();
+        return const ProviderScope(child: BottomNav());
       }));
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return LoginPage();
+        return ProviderScope(child: LoginPage());
       }));
     }
   }

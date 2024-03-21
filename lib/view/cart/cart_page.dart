@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/colors.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
 import 'package:hancode_test/view/components/products_count_widget.dart';
@@ -25,20 +26,23 @@ class CartPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Consumer<CounterProvider>(
-                  builder: (context, counterProvider, _) => ListView.builder(
+                  builder: (context, counterProvider, _) => ListView.separated(
+                    separatorBuilder: (context, index) => kHeight10,
                     shrinkWrap: true,
                     itemCount: selectedItems.length,
                     itemBuilder: (context, index) {
                       final item = selectedItems[index];
                       final price = double.parse(
                           item['price'].replaceAll('₹', '').trim());
-                      final quantity = counterProvider.getCounter(index);
+                      final quantity = item["quantity"];
                       final totalPrice = price * quantity;
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text("${index + 1}."),
-                          Text(item['name']),
+                          Text(
+                            item['name'],
+                          ),
                           ProductsCount(
                             index: index,
                             quantity: quantity,
@@ -64,7 +68,7 @@ class CartPage extends StatelessWidget {
                   height: 200,
                   child: ListView.separated(
                     separatorBuilder: (context, index) =>
-                        const SizedBox(width: 10),
+                        const SizedBox(height: 10),
                     scrollDirection: Axis.horizontal,
                     itemCount: 7,
                     itemBuilder: (context, index) => Card(
@@ -182,35 +186,32 @@ class CartPage extends StatelessWidget {
                           style: TextStyle(fontSize: 12),
                         )),
                       ),
-                      Consumer<CounterProvider>(
-                        builder: (context, counterProvider, _) =>
-                            ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: selectedItems.length,
-                          itemBuilder: (context, index) {
-                            final item = selectedItems[index];
-                            final price = double.parse(
-                                item['price'].replaceAll('₹', '').trim());
-                            final quantity = counterProvider.getCounter(index);
-                            final totalPrice = price * quantity;
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: selectedItems.length,
+                        itemBuilder: (context, index) {
+                          final item = selectedItems[index];
+                          final price = double.parse(
+                              item['price'].replaceAll('₹', '').trim());
+                          final quantity = item["quantity"];
+                          final totalPrice = price * quantity;
 
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(item['name']),
-                                      Text(totalPrice.toString()),
-                                    ],
-                                  ),
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(item['name']),
+                                    Text(totalPrice.toString()),
+                                  ],
                                 ),
-                              ],
-                            );
-                          },
-                        ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                       const Divider(),
                       Padding(

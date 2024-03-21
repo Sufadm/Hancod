@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/viewmodel/servide_selection_model.dart';
-import 'package:provider/provider.dart';
 
-class SelectButtons extends StatelessWidget {
+class SelectButtons extends ConsumerWidget {
   const SelectButtons({
-    super.key,
-    required this.context,
+    Key? key,
     required this.title,
     required this.index,
-    required this.selectedIndex,
-  });
+  }) : super(key: key);
 
-  final BuildContext context;
   final String title;
   final int index;
-  final int selectedIndex;
 
   @override
-  Widget build(BuildContext context) {
-    final isSelected = index == selectedIndex;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final serviceSelection = ref.watch(provider);
+    final isSelected = index == serviceSelection.selectedIndex;
+
     return GestureDetector(
       onTap: () {
-        Provider.of<ServiceSelectionModel>(context, listen: false)
-            .selectIndex(index);
+        serviceSelection.selectIndex(index);
       },
       child: Container(
         padding: const EdgeInsets.all(15),

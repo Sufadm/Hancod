@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/model/res/constant/service_imag.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
@@ -91,7 +92,8 @@ class HomePage extends StatelessWidget {
                                     if (index == 3) {
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (context) {
-                                        return ServiceAllScreen();
+                                        return ProviderScope(
+                                            child: ServiceAllScreen());
                                       }));
                                     }
                                   },

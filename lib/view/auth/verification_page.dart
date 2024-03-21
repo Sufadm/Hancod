@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hancode_test/model/res/constant/sizedbox.dart';
 import 'package:hancode_test/model/res/style/textstyles.dart';
 import 'package:hancode_test/view/components/timer_widget.dart';
@@ -7,7 +8,7 @@ import 'package:hancode_test/viewmodel/verification_form.dart';
 import 'package:hancode_test/view/bottomnav/bottom_nav_screen.dart';
 import 'package:provider/provider.dart';
 
-class VerificationPage extends StatelessWidget {
+class VerificationPage extends ConsumerWidget {
   final String verificationId;
   final String phoneNumber;
   VerificationPage({
@@ -18,7 +19,8 @@ class VerificationPage extends StatelessWidget {
   bool isVerified = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final load = ref.watch(myNotifierProvider);
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
@@ -58,34 +60,47 @@ class VerificationPage extends StatelessWidget {
                 ],
               ),
             ),
-            Consumer<Loading>(
-              builder: (context, value, child) {
-                return value.loading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                    const BeveledRectangleBorder())),
-                            onPressed: () {
-                              if (isVerified == true) {
-                                value.loading = true;
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const BottomNav()),
-                                );
-                              } else {}
-                            },
-                            child: Text(
-                              "Continue",
-                              style: latoB,
-                            )));
-              },
-            ),
+            load.loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                          const BeveledRectangleBorder(),
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (isVerified == true) {
+                          load.setLoading(true);
+                          try {
+                            await Future.delayed(const Duration(seconds: 1));
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ProviderScope(child: BottomNav()),
+                              ),
+                            );
+                          } catch (error) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text("Verification failed..pls try again"),
+                              ),
+                            );
+                            load.setLoading(false);
+                          }
+                        } else {}
+                      },
+                      child: Text(
+                        "Continue",
+                        style: latoB,
+                      ),
+                    ),
+                  ),
             kHeight10,
             Container(
                 margin: const EdgeInsets.only(right: 7),
